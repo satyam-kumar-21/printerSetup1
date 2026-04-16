@@ -4,20 +4,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Inline critical CSS for instant first paint -->
+  <style>
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,sans-serif;background:#f9fafb}
+    #root{min-height:100vh;display:flex;flex-direction:column}
+  </style>
   <!-- <link rel="icon" type="image/webp" href="/appinfohublogo.webp" /> -->
   <title>HP Smart App - Easy HP Printer Installation & Support</title>
   <meta name="description"
     content="HP Smart App: Effortless HP printer installation, driver setup, troubleshooting, and support. Get your printer online and working in minutes!" />
+  <!-- Preload hero image so browser fetches it immediately, not after React renders -->
+  <link rel="preload" href="/hero_background_image.webp" as="image" type="image/webp" fetchpriority="high">
+  <!-- Preconnect to font origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Preload Inter font file directly for faster FCP -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   </noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="/assets/style-0cd43d4e.css" media="print" onload="this.media='all'">
-  <!-- JivoChat Demo Widget -->
-  <script src="//code.jivosite.com/widget/jnhsn3P8fW" async></script>
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
+  <!-- JivoChat Demo Widget - deferred to avoid unused CSS on initial load -->
+  <script>
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var s = document.createElement('script');
+        s.src = '//code.jivosite.com/widget/jnhsn3P8fW';
+        s.async = true;
+        document.body.appendChild(s);
+      }, 3000);
+    });
+  </script>
 </head>
 
 <body class="bg-gray-50">

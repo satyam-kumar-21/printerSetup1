@@ -83,11 +83,11 @@ const Footer = () => {
         <div className="flex flex-col sm:flex-row items-center justify-between py-6 gap-4">
           <p className="text-gray-400 text-sm">Copyright © 2026 Smart ePrint All rights reserved</p>
           <div className="flex items-center gap-2">
-            <img src="https://img.icons8.com/color/38/paypal.png" alt="PayPal" className="h-7 object-contain" loading="lazy" />
-            <img src="https://img.icons8.com/color/38/visa.png" alt="Visa" className="h-7 object-contain" loading="lazy" />
-            <img src="https://img.icons8.com/color/38/mastercard-logo.png" alt="Mastercard" className="h-7 object-contain" loading="lazy" />
-            <img src="https://img.icons8.com/color/38/discover.png" alt="Discover" className="h-7 object-contain" loading="lazy" />
-            <img src="https://img.icons8.com/color/38/amex.png" alt="Amex" className="h-7 object-contain" loading="lazy" />
+            <img src="https://img.icons8.com/color/38/paypal.png" alt="PayPal" className="h-7 object-contain" loading="lazy" width="38" height="38" />
+            <img src="https://img.icons8.com/color/38/visa.png" alt="Visa" className="h-7 object-contain" loading="lazy" width="38" height="38" />
+            <img src="https://img.icons8.com/color/38/mastercard-logo.png" alt="Mastercard" className="h-7 object-contain" loading="lazy" width="38" height="38" />
+            <img src="https://img.icons8.com/color/38/discover.png" alt="Discover" className="h-7 object-contain" loading="lazy" width="38" height="38" />
+            <img src="https://img.icons8.com/color/38/amex.png" alt="Amex" className="h-7 object-contain" loading="lazy" width="38" height="38" />
           </div>
         </div>
       </div>
