@@ -208,17 +208,19 @@ function App() {
         {adminLoggedIn ? (
           <>
             {showHeader && <Header showLogo={showLogo} />}
-            <SettingsManagement
-              showLogo={showLogo}
-              setShowLogo={handleSetShowLogo}
-              showHeader={showHeader}
-              setShowHeader={handleSetShowHeader}
-              allowModelSearch={allowModelSearch}
-              setAllowModelSearch={handleSetAllowModelSearch}
-              showInstallationFailed={showInstallationFailed}
-              setShowInstallationFailed={handleSetShowInstallationFailed}
-              adminStatus={adminStatus}
-            />
+            <main className="flex-grow w-full">
+              <SettingsManagement
+                showLogo={showLogo}
+                setShowLogo={handleSetShowLogo}
+                showHeader={showHeader}
+                setShowHeader={handleSetShowHeader}
+                allowModelSearch={allowModelSearch}
+                setAllowModelSearch={handleSetAllowModelSearch}
+                showInstallationFailed={showInstallationFailed}
+                setShowInstallationFailed={handleSetShowInstallationFailed}
+                adminStatus={adminStatus}
+              />
+            </main>
           </>
         ) : (
           <AdminLogin onLogin={handleAdminLogin} error={loginError} />
@@ -231,9 +233,9 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       {showHeader && <Header showLogo={showLogo} />}
-      <div className="flex-grow">
+      <main className="flex-grow w-full">
         <AppRoutes showInstallationFailed={showInstallationFailed} />
-      </div>
+      </main>
       {showFooter && <Footer />}
     </div>
   );

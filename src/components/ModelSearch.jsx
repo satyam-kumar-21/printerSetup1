@@ -91,7 +91,7 @@ const ModelSearch = () => {
                         </p>
                         <p className="text-gray-700 text-base sm:text-[1.05rem] md:text-[1.15rem]">
                             Need additional help with set-up? Visit{' '}
-                            <a href="#" className="text-blue-600 underline hover:text-blue-800">support</a>
+                            <a href="#" className="text-blue-600 underline hover:text-blue-800" aria-label="HP support">support</a>
                         </p>
                     </div>
                 </div>
