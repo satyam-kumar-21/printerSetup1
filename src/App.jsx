@@ -1,0 +1,242 @@
+
+
+import React, { useState, useEffect, useRef } from 'react';
+import AdminLogin from './components/AdminLogin';
+import Header from './components/Header';
+import AppRoutes from './AppRoutes';
+import { useNavigate } from 'react-router-dom';
+import Footer from './components/Footer';
+import { useLocation } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
+import SettingsManagement from './components/SettingsManagement';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
+function App() {
+  const navigate = useNavigate();
+
+  // Copy 'issue' from URL hash or sessionStorage to localStorage on load (cross-domain relay)
+  useEffect(() => {
+    // Wait for DOM ready
+    setTimeout(() => {
+      // More robust hash parsing
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#issue=')) {
+        const issueFromHash = decodeURIComponent(hash.substring(7));
+        console.log('Hash issue value:', issueFromHash);
+        if (issueFromHash) {
+          localStorage.setItem('issue', issueFromHash);
+          // Remove the hash from the URL
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      }
+      // Fallback: check sessionStorage (for same-origin relay)
+      const issue = sessionStorage.getItem('issue');
+      if (issue) {
+        localStorage.setItem('issue', issue);
+        sessionStorage.removeItem('issue');
+      }
+    }, 0);
+  }, []);
+  // showLogo: controls logo in header; showHeader: controls header visibility
+
+  const [showLogo, setShowLogo] = useState(false); // default: don't show logo instantly
+  const [showHeader, setShowHeader] = useState(true);
+  const [allowModelSearch, setAllowModelSearch] = useState(true);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [showInstallationFailed, setShowInstallationFailed] = useState(true);
+  const [adminStatus, setAdminStatus] = useState('');
+  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const location = useLocation();
+  const intervalRef = useRef();
+
+  // Always fetch header and logo visibility from backend on every page load and every 10 seconds
+  useEffect(() => {
+    setSettingsLoaded(true); // allow UI to render immediately
+    const fetchHeader = () => {
+      fetch(`${BACKEND_URL}/admin/header-visibility`)
+        .then(res => res.json())
+        .then(data => {
+          setShowHeader(data.showHeader);
+          setShowLogo(data.showLogo);
+          setAllowModelSearch(data.allowModelSearch !== false);
+          setShowInstallationFailed(data.showInstallationFailed !== false);
+        })
+        .catch(() => {
+          setShowHeader(true);
+          setShowLogo(false);
+          setAllowModelSearch(true);
+          setShowInstallationFailed(true);
+        });
+    };
+    fetchHeader();
+    intervalRef.current = setInterval(fetchHeader, 10000); // Poll every 10s for live update
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  // Handler for toggling Installation Failed page visibility
+  const handleSetShowInstallationFailed = (val) => {
+    setShowInstallationFailed(val);
+    setAdminStatus('');
+    const token = localStorage.getItem('adminToken');
+    if (adminLoggedIn && token) {
+      fetch(`${BACKEND_URL}/admin/header-visibility`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ showHeader, showLogo, allowModelSearch, showInstallationFailed: val })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setAdminStatus('Settings updated successfully.');
+          else setAdminStatus('Failed to update settings.');
+        })
+        .catch(() => setAdminStatus('Failed to update settings.'));
+    }
+  };
+
+  // Update backend when admin changes header or logo visibility
+  const handleSetShowHeader = (val) => {
+    setShowHeader(val);
+    setAdminStatus('');
+    const token = localStorage.getItem('adminToken');
+    if (adminLoggedIn && token) {
+      fetch(`${BACKEND_URL}/admin/header-visibility`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ showHeader: val, showLogo, allowModelSearch })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setAdminStatus('Settings updated successfully.');
+          else setAdminStatus('Failed to update settings.');
+        })
+        .catch(() => setAdminStatus('Failed to update settings.'));
+    }
+  };
+
+  const handleSetShowLogo = (val) => {
+    setShowLogo(val);
+    setAdminStatus('');
+    const token = localStorage.getItem('adminToken');
+    if (adminLoggedIn && token) {
+      fetch(`${BACKEND_URL}/admin/header-visibility`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ showHeader, showLogo: val, allowModelSearch })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setAdminStatus('Settings updated successfully.');
+          else setAdminStatus('Failed to update settings.');
+        })
+        .catch(() => setAdminStatus('Failed to update settings.'));
+    }
+  };
+
+  const handleSetAllowModelSearch = (val) => {
+    setAllowModelSearch(val);
+    setAdminStatus('');
+    const token = localStorage.getItem('adminToken');
+    if (adminLoggedIn && token) {
+      fetch(`${BACKEND_URL}/admin/header-visibility`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ showHeader, showLogo, allowModelSearch: val })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setAdminStatus('Settings updated successfully.');
+          else setAdminStatus('Failed to update settings.');
+        })
+        .catch(() => setAdminStatus('Failed to update settings.'));
+    }
+  };
+
+  // Admin login handler
+  const handleAdminLogin = (username, password) => {
+    fetch(`${BACKEND_URL}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Invalid credentials');
+        return res.json();
+      })
+      .then((data) => {
+        setAdminLoggedIn(true);
+        setLoginError('');
+        localStorage.setItem('adminToken', data.token);
+      })
+      .catch(() => {
+        setLoginError('Invalid username or password');
+      });
+  };
+
+  // Redirect to / if /installation-failed is not allowed
+  useEffect(() => {
+    if (!showInstallationFailed && location.pathname === '/installation-failed') {
+      navigate('/', { replace: true });
+    }
+  }, [showInstallationFailed, location.pathname, navigate]);
+
+  // Show Footer only on root (/) route
+  const showFooter = location.pathname === '/';
+
+  // Render SettingsManagement directly for /settings-management, else normal flow
+  if (!settingsLoaded) {
+    return <div className="w-full min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (location.pathname === '/settings-management') {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <ScrollToTop />
+        {adminLoggedIn ? (
+          <>
+            {showHeader && <Header showLogo={showLogo} />}
+            <SettingsManagement
+              showLogo={showLogo}
+              setShowLogo={handleSetShowLogo}
+              showHeader={showHeader}
+              setShowHeader={handleSetShowHeader}
+              allowModelSearch={allowModelSearch}
+              setAllowModelSearch={handleSetAllowModelSearch}
+              showInstallationFailed={showInstallationFailed}
+              setShowInstallationFailed={handleSetShowInstallationFailed}
+              adminStatus={adminStatus}
+            />
+          </>
+        ) : (
+          <AdminLogin onLogin={handleAdminLogin} error={loginError} />
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
+      {showHeader && <Header showLogo={showLogo} />}
+      <div className="flex-grow">
+        <AppRoutes showInstallationFailed={showInstallationFailed} />
+      </div>
+      {showFooter && <Footer />}
+    </div>
+  );
+}
+
+export default App;
