@@ -10,7 +10,7 @@ const Header = ({ showLogo = true }) => {
       <nav className="w-full max-w-5xl flex items-center">
         <div className="flex items-center">
           {showLogo && (
-            <img src="/hp-logo.svg" alt="HP Logo" className="h-10 w-auto mr-4 inline-block align-middle" />
+            <img src="/hp-logo.svg" alt="HP Logo" className="h-10 w-auto mr-4 inline-block align-middle" width="40" height="40" />
           )}
           {/* Desktop Menu */}
           <ul className="hidden md:flex flex-row gap-8 items-center">
