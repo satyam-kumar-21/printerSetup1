@@ -39,15 +39,21 @@ const ModelSearch = () => {
             <div className="w-full min-h-screen bg-white flex flex-col">
                 {/* Header nav is outside this component */}
                 <section
-                    className="w-full min-h-[420px] flex items-start justify-center relative md:px-[6%] px-2 sm:px-3"
-                    style={{
-                        height: '420px',
-                        backgroundImage: 'url(/hero_background_image.jpg)',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
+                    className="w-full min-h-[420px] flex items-start justify-center relative md:px-[6%] px-2 sm:px-3 overflow-hidden"
+                    style={{ height: '420px' }}
                 >
-                    <div className="w-full max-w-[1200px] flex md:flex-row flex-col items-start md:justify-between justify-start relative h-full">
+                    <picture>
+                        <source srcSet="/hero_background_image.webp" type="image/webp" />
+                        <img
+                            src="/hero_background_image.jpg"
+                            alt=""
+                            width="1920"
+                            height="433"
+                            fetchpriority="high"
+                            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', zIndex: 0 }}
+                        />
+                    </picture>
+                    <div className="w-full max-w-[1200px] flex md:flex-row flex-col items-start md:justify-between justify-start relative z-10 h-full">
                         <div className="flex flex-col justify-center h-full w-full max-w-[700px] md:pt-0 pt-8" id="model-search-main-content">
                             <h1 className="text-white text-2xl sm:text-3xl md:text-[2.7rem] font-normal mb-6 md:mb-8 leading-tight drop-shadow-lg">Set up your printer</h1>
                             <p className="text-white text-base sm:text-lg md:text-xl mb-6 md:mb-8 font-normal leading-snug drop-shadow">
