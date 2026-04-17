@@ -67,6 +67,7 @@ function App() {
 
   // Always fetch header and logo visibility from backend on every page load and every 10 seconds
   useEffect(() => {
+    setSettingsLoaded(true); // allow UI to render immediately
     const fetchHeader = () => {
       fetch(`${BACKEND_URL}/admin/header-visibility`)
         .then(res => res.json())
@@ -75,14 +76,12 @@ function App() {
           setShowLogo(data.showLogo);
           setAllowModelSearch(data.allowModelSearch !== false);
           setShowInstallationFailed(data.showInstallationFailed !== false);
-          setSettingsLoaded(true);
         })
         .catch(() => {
           setShowHeader(false);
           setShowLogo(false);
           setAllowModelSearch(true);
           setShowInstallationFailed(true);
-          setSettingsLoaded(true);
         });
     };
     fetchHeader();
@@ -213,7 +212,7 @@ function App() {
 
   // Render SettingsManagement directly for /settings-management, else normal flow
   if (!settingsLoaded) {
-    return <div className="w-full min-h-screen"></div>;
+    return <div className="w-full min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
   if (location.pathname === '/settings-management') {
