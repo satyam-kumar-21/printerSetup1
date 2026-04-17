@@ -213,7 +213,7 @@ function App() {
 
   // Render SettingsManagement directly for /settings-management, else normal flow
   if (!settingsLoaded) {
-    return <div className="w-full min-h-screen flex items-center justify-center">Loading...</div>;
+    return <div className="w-full min-h-screen"></div>;
   }
 
   if (location.pathname === '/settings-management') {
