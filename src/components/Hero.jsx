@@ -6,7 +6,7 @@ const Hero = () => {
       <picture>
         <source srcSet="/hero_background_image.webp" type="image/webp" fetchpriority="high" />
         <img 
-          src="/hero_background_image.jpg" 
+          src="/hero_background_image.webp" 
           alt="Printer setup hero background"
           width="1920" height="420"
           style={{objectFit: 'cover', objectPosition: 'center', width: '100%', height: '320px', position: 'absolute', left: 0, top: 0, zIndex: 0}}

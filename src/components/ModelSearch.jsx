@@ -45,7 +45,7 @@ const ModelSearch = () => {
                     <picture>
                         <source srcSet="/hero_background_image.webp" type="image/webp" />
                         <img
-                            src="/hero_background_image.jpg"
+                            src="/hero_background_image.webp"
                             alt=""
                             width="1920"
                             height="433"

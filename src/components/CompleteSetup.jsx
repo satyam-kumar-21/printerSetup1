@@ -56,7 +56,7 @@ function CompleteSetup() {
           className="w-full min-h-[560px] flex items-start justify-center relative px-[6%]"
           style={{
             height: '560px',
-            backgroundImage: 'url(/hero_background_image.jpg)',
+            backgroundImage: 'url(/hero_background_image.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

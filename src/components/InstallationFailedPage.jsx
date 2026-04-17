@@ -12,7 +12,7 @@ export default function InstallationFailedPage() {
       <div
         className="md:min-h-[91vh] min-h-screen flex flex-col justify-center items-center bg-cover bg-center px-2"
         style={{
-          backgroundImage: "url('/hero_background_image.jpg')",
+          backgroundImage: "url('/hero_background_image.webp')",
         }}
       >
         <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 md:p-12 flex flex-col items-center animate-fadeIn mt-10 mb-10">
