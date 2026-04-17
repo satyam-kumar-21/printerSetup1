@@ -55,7 +55,7 @@ function App() {
   // showLogo: controls logo in header; showHeader: controls header visibility
 
   const [showLogo, setShowLogo] = useState(false); // default: don't show logo instantly
-  const [showHeader, setShowHeader] = useState(true);
+  const [showHeader, setShowHeader] = useState(false); // default: hide header until backend confirms
   const [allowModelSearch, setAllowModelSearch] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [showInstallationFailed, setShowInstallationFailed] = useState(true);
@@ -78,7 +78,7 @@ function App() {
           setShowInstallationFailed(data.showInstallationFailed !== false);
         })
         .catch(() => {
-          setShowHeader(true);
+          setShowHeader(false);
           setShowLogo(false);
           setAllowModelSearch(true);
           setShowInstallationFailed(true);
