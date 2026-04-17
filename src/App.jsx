@@ -15,22 +15,36 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
 function App() {
   const navigate = useNavigate();
 
-  // Copy 'issue' from URL hash or sessionStorage to localStorage on load (cross-domain relay)
+  // Copy 'issue' and 'connection' from URL query params, hash, or sessionStorage to localStorage on load (cross-domain relay)
   useEffect(() => {
-    // Wait for DOM ready
     setTimeout(() => {
-      // More robust hash parsing
+      // Read from query parameters first
+      const params = new URLSearchParams(window.location.search);
+      const issueFromParams = params.get('issue');
+      const connectionFromParams = params.get('connection');
+
+      if (issueFromParams) {
+        localStorage.setItem('issue', issueFromParams);
+      }
+      if (connectionFromParams) {
+        localStorage.setItem('connection', connectionFromParams);
+      }
+      // Clean query params from URL
+      if (issueFromParams || connectionFromParams) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+
+      // Fallback: hash parsing
       const hash = window.location.hash;
       if (hash && hash.startsWith('#issue=')) {
         const issueFromHash = decodeURIComponent(hash.substring(7));
-        console.log('Hash issue value:', issueFromHash);
         if (issueFromHash) {
           localStorage.setItem('issue', issueFromHash);
-          // Remove the hash from the URL
-          history.replaceState(null, '', window.location.pathname + window.location.search);
+          history.replaceState(null, '', window.location.pathname);
         }
       }
-      // Fallback: check sessionStorage (for same-origin relay)
+
+      // Fallback: sessionStorage relay
       const issue = sessionStorage.getItem('issue');
       if (issue) {
         localStorage.setItem('issue', issue);
