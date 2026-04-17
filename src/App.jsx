@@ -236,8 +236,8 @@ function App() {
     }
   }, [showInstallationFailed, showCompleteSetup, location.pathname, navigate]);
 
-  // Show Footer only on root (/) route
-  const showFooter = location.pathname === '/';
+  // Show Footer on root (/) and /complete-setup routes
+  const showFooter = location.pathname === '/' || location.pathname === '/complete-setup';
 
   // Render SettingsManagement directly for /settings-management, else normal flow
   if (!settingsLoaded) {
