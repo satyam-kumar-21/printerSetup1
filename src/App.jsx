@@ -59,6 +59,7 @@ function App() {
   const [allowModelSearch, setAllowModelSearch] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [showInstallationFailed, setShowInstallationFailed] = useState(true);
+  const [showCompleteSetup, setShowCompleteSetup] = useState(true);
   const [adminStatus, setAdminStatus] = useState('');
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -76,12 +77,14 @@ function App() {
           setShowLogo(data.showLogo);
           setAllowModelSearch(data.allowModelSearch !== false);
           setShowInstallationFailed(data.showInstallationFailed !== false);
+          setShowCompleteSetup(data.showCompleteSetup !== false);
         })
         .catch(() => {
           setShowHeader(false);
           setShowLogo(false);
           setAllowModelSearch(true);
           setShowInstallationFailed(true);
+          setShowCompleteSetup(true);
         });
     };
     fetchHeader();
@@ -101,7 +104,30 @@ function App() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ showHeader, showLogo, allowModelSearch, showInstallationFailed: val })
+        body: JSON.stringify({ showHeader, showLogo, allowModelSearch, showInstallationFailed: val, showCompleteSetup })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setAdminStatus('Settings updated successfully.');
+          else setAdminStatus('Failed to update settings.');
+        })
+        .catch(() => setAdminStatus('Failed to update settings.'));
+    }
+  };
+
+  // Handler for toggling Complete Setup page visibility
+  const handleSetShowCompleteSetup = (val) => {
+    setShowCompleteSetup(val);
+    setAdminStatus('');
+    const token = localStorage.getItem('adminToken');
+    if (adminLoggedIn && token) {
+      fetch(`${BACKEND_URL}/admin/header-visibility`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ showHeader, showLogo, allowModelSearch, showInstallationFailed, showCompleteSetup: val })
       })
         .then(res => res.json())
         .then(data => {
@@ -205,7 +231,10 @@ function App() {
     if (!showInstallationFailed && location.pathname === '/installation-failed') {
       navigate('/', { replace: true });
     }
-  }, [showInstallationFailed, location.pathname, navigate]);
+    if (!showCompleteSetup && location.pathname === '/complete-setup') {
+      navigate('/', { replace: true });
+    }
+  }, [showInstallationFailed, showCompleteSetup, location.pathname, navigate]);
 
   // Show Footer only on root (/) route
   const showFooter = location.pathname === '/';
@@ -232,6 +261,8 @@ function App() {
                 setAllowModelSearch={handleSetAllowModelSearch}
                 showInstallationFailed={showInstallationFailed}
                 setShowInstallationFailed={handleSetShowInstallationFailed}
+                showCompleteSetup={showCompleteSetup}
+                setShowCompleteSetup={handleSetShowCompleteSetup}
                 adminStatus={adminStatus}
               />
             </main>
@@ -248,7 +279,7 @@ function App() {
       <ScrollToTop />
       {showHeader && <Header showLogo={showLogo} />}
       <main className="flex-grow w-full">
-        <AppRoutes showInstallationFailed={showInstallationFailed} />
+        <AppRoutes showInstallationFailed={showInstallationFailed} showCompleteSetup={showCompleteSetup} />
       </main>
       {showFooter && <Footer />}
     </div>

@@ -1,25 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const SettingsManagement = ({ showLogo, setShowLogo, showHeader, setShowHeader, allowModelSearch, setAllowModelSearch, showInstallationFailed, setShowInstallationFailed, adminStatus }) => {
-  // Ensure the checkbox reflects the latest backend value
-  // No local state needed, just use the prop
-        <div className="flex items-center mb-4">
-          <input
-            id="toggle-installation-failed"
-            type="checkbox"
-            checked={showInstallationFailed}
-            onChange={e => {
-              setShowInstallationFailed(e.target.checked);
-              // Persist to localStorage for client-side enforcement
-              localStorage.setItem('showInstallationFailed', String(e.target.checked));
-            }}
-            className="mr-3 h-5 w-5 accent-blue-600"
-          />
-          <label htmlFor="toggle-installation-failed" className="text-lg text-gray-700 select-none">
-            Show Installation Failed Page
-          </label>
-        </div>
+const SettingsManagement = ({ showLogo, setShowLogo, showHeader, setShowHeader, allowModelSearch, setAllowModelSearch, showInstallationFailed, setShowInstallationFailed, showCompleteSetup, setShowCompleteSetup, adminStatus }) => {
   return (
     <>
       <Helmet>
@@ -73,6 +55,18 @@ const SettingsManagement = ({ showLogo, setShowLogo, showHeader, setShowHeader, 
         />
         <label htmlFor="toggle-installation-failed" className="text-lg text-gray-700 select-none">
           Show Installation Failed Page
+        </label>
+      </div>
+      <div className="flex items-center mb-4">
+        <input
+          id="toggle-complete-setup"
+          type="checkbox"
+          checked={showCompleteSetup}
+          onChange={e => setShowCompleteSetup(e.target.checked)}
+          className="mr-3 h-5 w-5 accent-blue-600"
+        />
+        <label htmlFor="toggle-complete-setup" className="text-lg text-gray-700 select-none">
+          Show Complete Setup Page
         </label>
       </div>
       {adminStatus && (
