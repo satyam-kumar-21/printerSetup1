@@ -58,8 +58,8 @@ function App() {
   const [showHeader, setShowHeader] = useState(false); // default: hide header until backend confirms
   const [allowModelSearch, setAllowModelSearch] = useState(true);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
-  const [showInstallationFailed, setShowInstallationFailed] = useState(true);
-  const [showCompleteSetup, setShowCompleteSetup] = useState(true);
+  const [showInstallationFailed, setShowInstallationFailed] = useState(false);
+  const [showCompleteSetup, setShowCompleteSetup] = useState(false);
   const [adminStatus, setAdminStatus] = useState('');
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -68,7 +68,6 @@ function App() {
 
   // Always fetch header and logo visibility from backend on every page load and every 10 seconds
   useEffect(() => {
-    setSettingsLoaded(true); // allow UI to render immediately
     const fetchHeader = () => {
       fetch(`${BACKEND_URL}/admin/header-visibility`)
         .then(res => res.json())
@@ -78,13 +77,15 @@ function App() {
           setAllowModelSearch(data.allowModelSearch !== false);
           setShowInstallationFailed(data.showInstallationFailed !== false);
           setShowCompleteSetup(data.showCompleteSetup !== false);
+          setSettingsLoaded(true);
         })
         .catch(() => {
           setShowHeader(false);
           setShowLogo(false);
           setAllowModelSearch(true);
-          setShowInstallationFailed(true);
-          setShowCompleteSetup(true);
+          setShowInstallationFailed(false);
+          setShowCompleteSetup(false);
+          setSettingsLoaded(true);
         });
     };
     fetchHeader();
